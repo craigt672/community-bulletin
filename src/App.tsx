@@ -1,21 +1,42 @@
 import React from 'react';
 
-import logo from './logo.svg';
 import './App.css';
 
-import { useData } from './api';
+import PostItem from './components/PostItem/PostItem';
+
+import { usePosts } from './api';
 
 function App() {
-  const data = useData();
+  const postsData = usePosts();
+  console.log(postsData);
+
+  const upvote = (id: string) => {
+    postsData.updateVote(id, 'upvote')
+  }
+
+  const downvote = (id: string) => {
+    postsData.updateVote(id, 'downvote')
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          {data}
-        </p>
+    <div>
+      <header className="header">
+        <h1>Community Bulletin Board</h1>
       </header>
+      <div className="container">
+        {postsData.posts.map(post => (
+          <PostItem 
+            key={post._id}
+            post={post}
+            upvote={upvote}
+            downvote={downvote}
+          />
+        ))}
+        <form action="">
+          <input type="text"/>
+          <textarea></textarea>
+        </form>
+      </div>
     </div>
   );
 }
